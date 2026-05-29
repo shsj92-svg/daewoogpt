@@ -238,21 +238,7 @@
   const APIKEY_STORAGE = 'qa_api_key';
   const CHATS_STORAGE = 'qa_chats';
 
-  const SYSTEM_PROMPT = `당신은 소프트웨어 QA(품질보증) 교육 전문 튜터입니다. 직업훈련 과정의 훈련생들을 가르치고 있습니다.
-
-다음 주제에 대해 친절하고 명확하게 답변하세요:
-- 테스트 케이스 작성 (블랙박스/화이트박스/그레이박스 테스트)
-- 버그 리포트 작성법 및 결함 관리
-- QA 프로세스 및 방법론 (V-모델, 애자일 테스팅 등)
-- 테스트 자동화 기초 (Selenium, Cypress, JMeter 등)
-- Jira, TestRail, Zephyr 등 QA 툴 사용법
-- 성능 테스트, 보안 테스트 기초
-- 소프트웨어 개발 생명주기(SDLC)에서 QA 역할
-
-답변 규칙:
-1. 훈련생 수준에 맞게 쉽고 친절하게 설명하세요.
-2. 예시를 들어 설명하면 더 좋습니다.
-3. 한국어로 답변하세요.`;
+  const SYSTEM_PROMPT = `당신은 친절하고 유능한 AI 어시스턴트입니다. 어떤 질문이든 성실하고 명확하게 답변해주세요. 한국어로 답변하세요.`;
 
   let apiKey = '';
   let currentChatId = null;
