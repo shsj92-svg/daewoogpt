@@ -389,17 +389,48 @@
       const res=await fetch('https://api.openai.com/v1/chat/completions',{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-        body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'system',content:SYSTEM_PROMPT},...apiMessages],max_tokens:2000})
+        body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'system',content:SYSTEM_PROMPT},...apiMessages],max_tokens:2000,stream:true})
       });
-      const data=await res.json();
+
       removeTyping();
-      if (data.error) { appendMessage('bot','오류: '+data.error.message); }
-      else {
-        const reply=data.choices[0].message.content;
-        appendMessage('bot',reply);
-        chat.messages.push({role:'assistant',content:reply,date:getToday(),time:getTime()});
-        saveChats();
+
+      // 스트리밍 말풍선 생성
+      const container=document.getElementById('chat-messages');
+      const wrapper=document.createElement('div'); wrapper.className='msg-wrapper bot';
+      const row=document.createElement('div'); row.className='bot-row';
+      const icon=document.createElement('div'); icon.className='bot-icon'; icon.textContent='✦';
+      const content=document.createElement('div'); content.className='bot-content';
+      row.appendChild(icon); row.appendChild(content);
+      wrapper.appendChild(row); container.appendChild(wrapper);
+
+      const reader=res.body.getReader();
+      const decoder=new TextDecoder();
+      let fullText='';
+
+      while(true){
+        const {done,value}=await reader.read();
+        if(done) break;
+        const chunk=decoder.decode(value);
+        const lines=chunk.split('\n');
+        for(const line of lines){
+          if(!line.startsWith('data:')) continue;
+          const data=line.slice(6).trim();
+          if(data==='[DONE]') break;
+          try {
+            const json=JSON.parse(data);
+            const delta=json.choices?.[0]?.delta?.content||'';
+            if(delta){
+              fullText+=delta;
+              content.innerHTML=typeof marked!=='undefined'?marked.parse(fullText):fullText.replace(/\n/g,'<br>');
+              container.scrollTop=container.scrollHeight;
+            }
+          } catch{}
+        }
       }
+
+      chat.messages.push({role:'assistant',content:fullText,date:getToday(),time:getTime()});
+      saveChats();
+
     } catch(e) { removeTyping(); appendMessage('bot','네트워크 오류가 발생했어요. 잠시 후 다시 시도해주세요.'); }
     document.getElementById('send-btn').disabled=false;
     document.getElementById('user-input').focus();
