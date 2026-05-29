@@ -136,15 +136,7 @@
     40% { transform: translateY(-6px); opacity: 1; }
   }
 
-  .quick-btns {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    padding: 0 16px 10px; background: #fff; flex-shrink: 0;
-  }
-  .quick-btn {
-    font-size: 12px; padding: 6px 13px; border: 1px solid #ddd; border-radius: 20px;
-    background: #fff; color: #555; cursor: pointer;
-  }
-  .quick-btn:hover { background: #f5f5f5; color: #111; }
+
 
   .chat-input-area {
     background: #fff; border-top: 1px solid #e0e0e0;
@@ -220,13 +212,7 @@
 
     <div class="chat-messages" id="chat-messages"></div>
 
-    <div class="quick-btns" id="quick-btns">
-      <button class="quick-btn" onclick="sendQuick('테스트 케이스 작성법을 알려줘')">📋 테스트 케이스 작성법</button>
-      <button class="quick-btn" onclick="sendQuick('버그 리포트는 어떻게 써야 해?')">🐛 버그 리포트 작성</button>
-      <button class="quick-btn" onclick="sendQuick('블랙박스 테스트와 화이트박스 테스트 차이를 설명해줘')">🔍 블랙박스 vs 화이트박스</button>
-      <button class="quick-btn" onclick="sendQuick('QA와 QC의 차이가 뭐야?')">❓ QA vs QC 차이</button>
-      <button class="quick-btn" onclick="sendQuick('Jira로 버그를 어떻게 등록해?')">🛠️ Jira 사용법</button>
-    </div>
+
 
     <div class="chat-input-area">
       <textarea id="user-input" placeholder="질문을 입력하세요... (Shift+Enter: 줄바꿈)" rows="1"
@@ -333,7 +319,7 @@
     document.getElementById('chat-title').textContent = chat.title || '새 대화';
     const container = document.getElementById('chat-messages');
     container.innerHTML = '';
-    document.getElementById('quick-btns').style.display = chat.messages.length === 0 ? 'flex' : 'none';
+
 
     let lastDate = '';
     chat.messages.forEach(msg => {
@@ -432,7 +418,7 @@
     if (!text || !currentChatId) return;
     input.value = ''; input.style.height = 'auto';
     document.getElementById('send-btn').disabled = true;
-    document.getElementById('quick-btns').style.display = 'none';
+
 
     const chat = chats[currentChatId];
     const today = getToday();
@@ -486,10 +472,7 @@
     document.getElementById('send-btn').disabled = false;
   }
 
-  function sendQuick(text) {
-    document.getElementById('user-input').value = text;
-    sendMessage();
-  }
+
 
   function autoResize(el) {
     el.style.height = 'auto';
